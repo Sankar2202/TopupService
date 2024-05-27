@@ -1,0 +1,50 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Top-Up Beneficiaries";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<h2>Add Beneficiary</h2>
+<form method="post" asp-page-handler="AddBeneficiary">
+    <label for="nickname">Nickname:</label>
+    <input type="text" id="nickname" name="Nickname" maxlength="20" required />
+    <button type="submit">Add</button>
+</form>
+
+<h2>Beneficiaries</h2>
+@if (Model.Beneficiaries != null && Model.Beneficiaries.Any())
+{
+    <ul>
+        @foreach (var beneficiary in Model.Beneficiaries)
+        {
+            <li>@beneficiary.Nickname - @beneficiary.MonthlyTopUpAmount AED topped up this month</li>
+        }
+    </ul>
+}
+else
+{
+    <p>No beneficiaries added yet.</p>
+}
+
+<h2>Top-Up</h2>
+<form method="post" asp-page-handler="TopUp">
+    <label for="beneficiary">Beneficiary:</label>
+    <select id="beneficiary" name="BeneficiaryId" required>
+        @foreach (var beneficiary in Model.Beneficiaries)
+        {
+            <option value="@beneficiary.Id">@beneficiary.Nickname</option>
+        }
+    </select>
+    <label for="amount">Amount:</label>
+    <select id="amount" name="Amount" required>
+        @foreach (var option in Model.TopUpOptions)
+        {
+            <option value="@option.Amount">@option.Amount AED</option>
+        }
+    </select>
+    <label for="isVerified">Verified:</label>
+    <input type="checkbox" id="isVerified" name="IsVerified" />
+    <button type="submit">Top-Up</button>
+</form>
